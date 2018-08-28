@@ -2,6 +2,7 @@
 
 const User = use('App/Models/User')
 const crypto = require('crypto')
+const Mail = use('Mail')
 
 class ForgotPasswordController {
     async store ({ request, response }) {
@@ -16,6 +17,15 @@ class ForgotPasswordController {
             user.token_created_at = new Date()
 
             await user.save()
+            await Mail.send(
+                ['emails.forgot_password'], // template
+                { email, token: user.token, link: `${request.input('redirect_url')}?token=${user.token}` }, // variable for the template
+                message => {
+                    message
+                        .to(user.email)
+                        .from('thiago@teste.com.br', 'Thiago | Teste')
+                        .subject('Password Recovery')
+                })
         } catch (err) {
             return response.status(err.status).send({ error: { message: 'Something did not work. Do the e-mail exists?' } })
         }
