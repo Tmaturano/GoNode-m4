@@ -46,13 +46,13 @@ class ForgotPasswordController {
       if (tokenExpired) {
         return response
           .status(401)
-          .send({ error: { message: 'Token is expired' } })  
+          .send({ error: { message: 'Token is expired' } })
       }
 
       user.token = null
       user.token_created_at = null
       user.password = password
-      
+
       await user.save()
     } catch (err) {
       return response
