@@ -30,4 +30,7 @@ Route.group(() => {
   Route.post('files', 'FileController.store')
 
   Route.resource('projects', 'ProjectController').apiOnly()
+
+  // this route will be something like: /projects/:idProject/tasks
+  Route.resource('projects.tasks', 'TaskController').apiOnly()
 }).middleware(['auth'])
